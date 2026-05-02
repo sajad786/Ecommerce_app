@@ -62,5 +62,11 @@
     "DESCRIPTION": "Description",
     "READ_MORE": "Read more",
     "SHOW_LESS": "Show less",
-    "PRODUCTS": "Products"
+    "PRODUCTS": "Products",
+    "APPEARANCE": "Appearance",
+    "DARK_MODE": "Dark Mode",
+    "PREFERENCES": "Preferences",
+    "ACCOUNT": "Account",
+    "LOGOUT_CONFIRMATION": "Are you sure you want to logout?",
+    "CANCEL": "Cancel"
 }

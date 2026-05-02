@@ -75,6 +75,12 @@ export const MainStack = () => {
             <HeartIcon color={color} focused={focused} />
           ),
         }} />
+      <Tab.Screen name="ProductDetails" component={ProductDetails}
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <HeartIcon color={color} focused={focused} />
+          ),
+        }} />
       {/* <Tab.Screen name="Profile" component={Profile} options={{
         tabBarIcon: ({ color, focused }) => (
           focused ? <ProfileInactiveIcon color={color} /> : <ProfileInactiveIcon color={color} />
@@ -85,9 +91,7 @@ export const MainStack = () => {
           <SettingsIcon fill={colors.text} width={20} height={20} />
         )
       }} />
-      <Tab.Screen name="ProductDetails" component={ProductDetails} options={{
-        tabBarButton: () => null, // ensure it's completely hidden if it bypasses MyTabBar somehow
-      }} />
+
     </Tab.Navigator>
   );
 }; 

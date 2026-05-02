@@ -30,11 +30,11 @@ const Home = ({ navigation }: any) => {
     const [categories, setCategories] = useState<any[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [searchQuery, setSearchQuery] = useState('');
-    
+
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
-    
+
     const [skip, setSkip] = useState(0);
     const [total, setTotal] = useState(0);
 
@@ -145,10 +145,10 @@ const Home = ({ navigation }: any) => {
     const renderProductCard = useCallback(({ item, index }: { item: Product; index: number }) => {
         const isFav = favouriteItems.some(fav => fav.id === item.id);
         return (
-            <ProductCard 
-                item={item} 
-                index={index} 
-                onPress={() => onPressCard(item)} 
+            <ProductCard
+                item={item}
+                index={index}
+                onPress={() => onPressCard(item)}
                 isFavourite={isFav}
                 onToggleFavourite={() => onToggleFav(item)}
             />
@@ -158,16 +158,16 @@ const Home = ({ navigation }: any) => {
     const renderCategory = ({ item }: { item: any }) => {
         const isSelected = selectedCategory === (typeof item === 'string' ? item : item.slug);
         const displayName = typeof item === 'string' ? item : item.name;
-        
+
         return (
-            <Pressable 
+            <Pressable
                 style={[styles.categoryPill, isSelected && styles.categoryPillSelected]}
                 onPress={() => selectCategory(item)}
             >
-                <TextComp 
-                    text={displayName} 
-                    isDynamic 
-                    style={[styles.categoryText, isSelected && styles.categoryTextSelected]} 
+                <TextComp
+                    text={displayName}
+                    isDynamic
+                    style={[styles.categoryText, isSelected && styles.categoryTextSelected]}
                 />
             </Pressable>
         );
@@ -176,7 +176,6 @@ const Home = ({ navigation }: any) => {
     return (
         <WrapperContainer style={styles.container} edges={['top']}>
             <HeaderComp showBack={false} title={t('PRODUCTS')} />
-            
             <View style={styles.searchContainer}>
                 <TextInput
                     style={[styles.searchInput, { color: colors.text }]}

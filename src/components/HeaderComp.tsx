@@ -15,16 +15,19 @@ import { LanguageInterface } from '@/redux/reducers/settings';
 import { secureStorage } from '@/utils/secureStorage';
 import { clearDataAction } from '@/redux/actions/auth';
 import ButtonComp from './ButtonComp';
+
 interface HeaderCompProps {
     title?: string;
     showBack?: boolean;
     customStyle?: object;
+    showSettings?: boolean;
 }
 
 const HeaderComp: React.FC<HeaderCompProps> = ({
     title,
     showBack = true,
     customStyle,
+    showSettings = false
 }) => {
     const navigation = useNavigation();
     const { theme, toggleTheme } = useTheme();
@@ -82,9 +85,9 @@ const HeaderComp: React.FC<HeaderCompProps> = ({
                 />
             )}
 
-            <Pressable onPress={() => setIsModalVisible(true)}>
+            {showSettings ? <Pressable onPress={() => setIsModalVisible(true)}>
                 <SettingsIcon fill={colors.text} width={20} height={20} />
-            </Pressable>
+            </Pressable> : <View />}
 
             <ModalComp isVisible={isModalVisible} onClose={closeModal}>
                 <View style={styles.modalContainer}>
