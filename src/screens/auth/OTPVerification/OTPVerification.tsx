@@ -12,7 +12,8 @@ import useIsRTL from '@/hooks/useIsRTL';
 import { AuthStackParamList } from '@/navigation/types';
 import { OtpInput } from "react-native-otp-entry";
 import useRTLStyles from './styles';
-import { changeFirstTimeState } from '@/redux/actions/auth';
+import { changeFirstTime, saveAuthToken } from '@/redux/reducers/auth';
+import { useDispatch } from 'react-redux';
 
 interface OTPVerificationProps {
     route: {
@@ -29,10 +30,12 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({ route }) => {
     const styles = useRTLStyles(isRTL, theme);
     const [otp, setOtp] = useState('');
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+    const dispatch = useDispatch();
 
     const handleContinue = () => {
-        changeFirstTimeState(true);
-        // TODO: Implement OTP verification logic
+        dispatch(saveAuthToken('dummy_auth_token_12345'));
+        dispatch(changeFirstTime(true));
+        // TODO: Implement actual OTP verification logic
     };
 
     const handleResendOTP = () => {

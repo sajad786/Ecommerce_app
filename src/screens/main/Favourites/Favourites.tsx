@@ -10,6 +10,7 @@ import DropdownComp from '@/components/DropdownComp';
 import { RootState } from '@/redux/reducers';
 import { toggleFavourite } from '@/redux/reducers/favourites';
 import { Product } from '@/screens/main/Home/home.types';
+import AuthWrapperComponent from '@/components/AuthWrapperComponent';
 import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
 import useRTLStyles from './styles';
@@ -133,7 +134,8 @@ const Favourites = ({ navigation }: any) => {
     };
 
     return (
-        <WrapperContainer style={styles.container} edges={['top']}>
+        <AuthWrapperComponent>
+            <WrapperContainer style={styles.container} edges={['top']}>
             <HeaderComp showBack={false} title={t('FAVOURITES')} />
 
             {favouriteItems.length > 0 && (
@@ -180,6 +182,7 @@ const Favourites = ({ navigation }: any) => {
                 />
             )}
         </WrapperContainer>
+        </AuthWrapperComponent>
     );
 };
 

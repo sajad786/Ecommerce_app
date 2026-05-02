@@ -77,5 +77,8 @@
     "SORT_RATING": "Rating",
     "CART_ITEMS_COUNT": "Cart: {{count}} item(s)",
     "FAVOURITES_ITEMS_COUNT": "Favourites: {{count}} item(s)",
-    "DEFAULT_OTP": "The default otp for testing is 12345"
+    "DEFAULT_OTP": "The default otp for testing is 12345",
+    "LOGIN_REQUIRED_MESSAGE": "You need to be logged in to access this feature.",
+    "GO_TO_LOGIN": "Go to Login",
+    "SKIP": "Skip"
 }

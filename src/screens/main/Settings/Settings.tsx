@@ -55,6 +55,8 @@ const SettingsScreen = () => {
     const dispatch = useDispatch();
 
     const { defaultLanguage, defaultTheme } = useSelector((state: RootState) => state.settings);
+    const { auth_token } = useSelector((state: RootState) => state.auth);
+    const isAuthenticated = !!auth_token;
 
     const isDarkMode = defaultTheme.myTheme === 'dark';
 
@@ -147,23 +149,24 @@ const SettingsScreen = () => {
 
                 <View style={styles.divider} />
 
-                <View style={styles.section}>
-                    <TextComp text={t('ACCOUNT')} isDynamic style={styles.sectionTitle} />
-                    <Pressable
-                        style={({ pressed }) => [
-                            styles.settingItem,
-                            pressed && styles.itemPressed
-                        ]}
-                        onPress={handleLogout}
-                    >
-                        <View style={styles.itemLeft}>
-                            <View style={[styles.iconContainer, { backgroundColor: commonColors.secondary + '20' }]}>
-                                <LogoutIcon color={commonColors.secondary} />
+                {!!isAuthenticated && (
+                    <View style={styles.section}>
+                        <TextComp text={t('ACCOUNT')} isDynamic style={styles.sectionTitle} />
+                        <Pressable
+                            style={({ pressed }) => [
+                                styles.settingItem,
+                                pressed && styles.itemPressed
+                            ]}
+                            onPress={handleLogout}
+                        >
+                            <View style={styles.itemLeft}>
+                                <View style={[styles.iconContainer, { backgroundColor: commonColors.secondary + '20' }]}>
+                                    <LogoutIcon color={commonColors.secondary} />
+                                </View>
+                                <TextComp text={t('LOGOUT')} isDynamic style={[styles.itemText, { color: commonColors.secondary }]} />
                             </View>
-                            <TextComp text={t('LOGOUT')} isDynamic style={[styles.itemText, { color: commonColors.secondary }]} />
-                        </View>
-                    </Pressable>
-                </View>
+                        </Pressable>
+                    </View>)}
             </View>
         </WrapperContainer>
     );

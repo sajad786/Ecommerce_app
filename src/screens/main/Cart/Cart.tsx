@@ -6,6 +6,7 @@ import HeaderComp from '@/components/HeaderComp';
 import WrapperContainer from '@/components/WrapperContainer';
 import TextComp from '@/components/TextComp';
 import CartItemCard from '@/components/CartItemCard';
+import AuthWrapperComponent from '@/components/AuthWrapperComponent';
 import { RootState } from '@/redux/reducers';
 import { increaseQuantity, decreaseQuantity, removeFromCart } from '@/redux/reducers/cart';
 import { toggleFavourite } from '@/redux/reducers/favourites';
@@ -73,7 +74,8 @@ const Cart = () => {
     );
 
     return (
-        <WrapperContainer style={styles.container} edges={['top']}>
+        <AuthWrapperComponent>
+            <WrapperContainer style={styles.container} edges={['top']}>
             <HeaderComp showBack={false} title={t('CART')} />
 
             <View style={styles.countsContainer}>
@@ -132,6 +134,7 @@ const Cart = () => {
                 </>
             )}
         </WrapperContainer>
+        </AuthWrapperComponent>
     );
 };
 
