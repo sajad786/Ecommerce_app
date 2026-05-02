@@ -163,10 +163,10 @@ const Home = ({ navigation }: any) => {
     const LeftComponent = useCallback(() => {
         return (
             <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TextComp style={styles.leftComponentText} text={`Welcome ${userName}`} />
+                <TextComp style={styles.leftComponentText} text={`${t('WELCOME')} ${userName}`} />
             </TouchableOpacity>
         );
-    }, [userName]);
+    }, [userName, isRTL, theme]);
 
     const renderCategory = ({ item }: { item: any }) => {
         const isSelected = selectedCategory === (typeof item === 'string' ? item : item.slug);
@@ -204,6 +204,17 @@ const Home = ({ navigation }: any) => {
                 />
             </View>
 
+            <View>
+                <FlatList
+                    data={categories}
+                    renderItem={renderCategory}
+                    keyExtractor={(item, index) => typeof item === 'string' ? item : (item.slug || index.toString())}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.categoriesContainer}
+                    inverted={isRTL}
+                />
+            </View>
 
             {loading && products.length === 0 ? (
                 <View style={styles.loadingContainer}>
@@ -211,17 +222,7 @@ const Home = ({ navigation }: any) => {
                 </View>
             ) : (
                 <Fragment>
-                    <View>
-                        <FlatList
-                            data={categories}
-                            renderItem={renderCategory}
-                            keyExtractor={(item, index) => typeof item === 'string' ? item : (item.slug || index.toString())}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.categoriesContainer}
-                            inverted={isRTL}
-                        />
-                    </View>
+
                     <FlatList
                         data={products}
                         renderItem={renderProductCard}

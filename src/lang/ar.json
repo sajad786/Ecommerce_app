@@ -68,5 +68,6 @@
     "PREFERENCES": "التفضيلات",
     "ACCOUNT": "الحساب",
     "LOGOUT_CONFIRMATION": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
-    "CANCEL": "إلغاء"
+    "CANCEL": "إلغاء",
+    "WELCOME": "مرحبا"
 }

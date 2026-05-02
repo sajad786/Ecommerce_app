@@ -68,5 +68,6 @@
     "PREFERENCES": "Preferences",
     "ACCOUNT": "Account",
     "LOGOUT_CONFIRMATION": "Are you sure you want to logout?",
-    "CANCEL": "Cancel"
+    "CANCEL": "Cancel",
+    "WELCOME": "Welcome"
 }

@@ -27,9 +27,6 @@ const Login = () => {
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
 
 
-
-
-
     const handleNext = () => {
         const normalizedEmail = email.trim().toLowerCase();
 

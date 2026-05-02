@@ -69,6 +69,7 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
             fontSize: moderateScale(16),
             fontFamily: fontFamily.medium,
             color: colors.text,
+            textAlign: isRTL ? 'right' : 'left',
         },
     }), [isRTL, theme, colors]);
 };
