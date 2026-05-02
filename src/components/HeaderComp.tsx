@@ -21,13 +21,15 @@ interface HeaderCompProps {
     showBack?: boolean;
     customStyle?: object;
     showSettings?: boolean;
+    leftComponent?: React.ReactNode;
 }
 
 const HeaderComp: React.FC<HeaderCompProps> = ({
     title,
     showBack = true,
     customStyle,
-    showSettings = false
+    showSettings = false,
+    leftComponent,
 }) => {
     const navigation = useNavigation();
     const { theme, toggleTheme } = useTheme();
@@ -69,14 +71,15 @@ const HeaderComp: React.FC<HeaderCompProps> = ({
 
     return (
         <View style={[styles.container, customStyle]}>
-            {showBack ?
+            {leftComponent && leftComponent}
+            {(showBack && !leftComponent )&&
                 <TouchableOpacity
                     onPress={handleBackPress}
                     hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
                     <BackArrowIcon />
                 </TouchableOpacity>
-                : <View />}
+                }
 
             {title && (
                 <TextComp

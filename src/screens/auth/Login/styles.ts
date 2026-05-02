@@ -14,7 +14,7 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
         },
         content: {
             flex: 1,
-            marginTop: moderateScale(24),
+            marginVertical: moderateScale(24),
             justifyContent: 'space-between',
         },
         titleSection: {

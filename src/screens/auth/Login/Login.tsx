@@ -1,8 +1,9 @@
 //import liraries
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useActionState, useState } from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import ButtonComp from '@/components/ButtonComp';
 import HeaderComp from '@/components/HeaderComp';
@@ -14,13 +15,15 @@ import { AuthStackParamList } from '@/navigation/types';
 
 import { useTheme } from '@/context/ThemeContext';
 import useRTLStyles from './styles';
+import { RootState } from '@/redux/store';
 
 const Login = () => {
     const isRTL = useIsRTL();
-    const {  theme } = useTheme();
+    const { theme } = useTheme();
 
     const styles = useRTLStyles(isRTL, theme);
     const [email, setEmail] = useState('');
+    const { registeredUsers } = useSelector((state: RootState) => state.auth);
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
 
 
@@ -28,8 +31,24 @@ const Login = () => {
 
 
     const handleNext = () => {
-        navigation.navigate('OTPVerification', { phoneNumber: '1234567890' });
-        // TODO: Implement next step logic
+        const normalizedEmail = email.trim().toLowerCase();
+
+        if (!normalizedEmail) {
+            Alert.alert('Missing email', 'Please enter your email to continue.');
+            return;
+        }
+
+        const existingUser = registeredUsers.find(
+            user => user.email.toLowerCase() === normalizedEmail
+        );
+
+        if (!existingUser) {
+            Alert.alert('Account not found', 'Please register first before logging in.');
+            navigation.navigate('Signup');
+            return;
+        }
+
+        navigation.navigate('OTPVerification', { phoneNumber: existingUser.phone });
     };
 
     const handleSignUp = () => {
@@ -37,7 +56,7 @@ const Login = () => {
     };
 
     return (
-        <WrapperContainer style={styles.container}>
+        <WrapperContainer edges={['bottom', 'top']} style={styles.container}>
             <HeaderComp showBack={false} customStyle={styles.header} />
             <View style={styles.content}>
                 <View>
@@ -82,7 +101,7 @@ const Login = () => {
                             onPress={handleNext}
                             style={styles.nextButton}
                         />
-                     
+
                     </View>
                 </View>
 

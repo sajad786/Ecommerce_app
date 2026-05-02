@@ -3,6 +3,7 @@ import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 export const STORAGE_KEYS = {
   AUTH_TOKEN: 'auth_token',
   USER_DATA: 'user_data',
+  REGISTERED_USERS: 'registered_users',
   IS_FIRST_TIME: 'is_first_time',
   LANGUAGE: 'language',
   THEME: 'theme',

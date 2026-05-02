@@ -7,14 +7,15 @@ import useIsRTL from '@/hooks/useIsRTL';
 import * as homeActions from '@/redux/actions/home';
 import { commonColors, Colors } from '@/styles/colors';
 import { debounce } from '@/utils/debounce';
-import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, View, TextInput, Pressable } from 'react-native';
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, FlatList, RefreshControl, View, TextInput, Pressable, TouchableOpacity } from 'react-native';
 import { Product, ProductsResponse } from './home.types';
 import useRTLStyles from './styles';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavourite } from '@/redux/reducers/favourites';
 import { RootState } from '@/redux/reducers';
+import { BackArrowIcon } from '@/assets/icons';
 
 const LIMIT = 10;
 
@@ -39,11 +40,15 @@ const Home = ({ navigation }: any) => {
     const [total, setTotal] = useState(0);
 
     const favouriteItems = useSelector((state: RootState) => state.favourites.items);
+    const { registeredUsers } = useSelector((state: RootState) => state.auth);
+
+    const userName = useMemo(() => {
+        return registeredUsers?.length ? registeredUsers[0]?.fullName : 'User';
+    }, [registeredUsers]);
 
     const fetchCategories = async () => {
         try {
             const response = await homeActions.getCategories() as unknown as any[];
-            // DummyJSON sometimes returns array of strings or objects. Assuming objects {slug, name} or strings
             if (response && Array.isArray(response)) {
                 setCategories([{ slug: 'All', name: 'All' }, ...response]);
             }
@@ -155,6 +160,14 @@ const Home = ({ navigation }: any) => {
         );
     }, [favouriteItems, onPressCard]);
 
+    const LeftComponent = useCallback(() => {
+        return (
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TextComp style={styles.leftComponentText} text={`Welcome ${userName}`} />
+            </TouchableOpacity>
+        );
+    }, [userName]);
+
     const renderCategory = ({ item }: { item: any }) => {
         const isSelected = selectedCategory === (typeof item === 'string' ? item : item.slug);
         const displayName = typeof item === 'string' ? item : item.name;
@@ -175,7 +188,10 @@ const Home = ({ navigation }: any) => {
 
     return (
         <WrapperContainer style={styles.container} edges={['top']}>
-            <HeaderComp showBack={false} title={t('PRODUCTS')} />
+            <HeaderComp showBack={false}
+                leftComponent={<LeftComponent />}
+            // title={t('PRODUCTS')}
+            />
             <View style={styles.searchContainer}>
                 <TextInput
                     style={[styles.searchInput, { color: colors.text }]}
@@ -188,48 +204,51 @@ const Home = ({ navigation }: any) => {
                 />
             </View>
 
-            <View>
-                <FlatList
-                    data={categories}
-                    renderItem={renderCategory}
-                    keyExtractor={(item, index) => typeof item === 'string' ? item : (item.slug || index.toString())}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.categoriesContainer}
-                    inverted={isRTL}
-                />
-            </View>
 
             {loading && products.length === 0 ? (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color={commonColors.primary} />
                 </View>
             ) : (
-                <FlatList
-                    data={products}
-                    renderItem={renderProductCard}
-                    keyExtractor={item => item.id.toString()}
-                    showsVerticalScrollIndicator={false}
-                    numColumns={2}
-                    contentContainerStyle={styles.listContainer}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={onRefresh}
-                            colors={[commonColors.primary]}
-                            tintColor={commonColors.primary}
+                <Fragment>
+                    <View>
+                        <FlatList
+                            data={categories}
+                            renderItem={renderCategory}
+                            keyExtractor={(item, index) => typeof item === 'string' ? item : (item.slug || index.toString())}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={styles.categoriesContainer}
+                            inverted={isRTL}
                         />
-                    }
-                    onEndReached={loadMore}
-                    onEndReachedThreshold={0.5}
-                    ListFooterComponent={
-                        loadingMore ? (
-                            <View style={styles.footerLoader}>
-                                <ActivityIndicator size="small" color={commonColors.primary} />
-                            </View>
-                        ) : null
-                    }
-                />
+                    </View>
+                    <FlatList
+                        data={products}
+                        renderItem={renderProductCard}
+                        keyExtractor={item => item.id.toString()}
+                        showsVerticalScrollIndicator={false}
+                        numColumns={2}
+                        contentContainerStyle={styles.listContainer}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                                colors={[commonColors.primary]}
+                                tintColor={commonColors.primary}
+                            />
+                        }
+                        onEndReached={loadMore}
+                        onEndReachedThreshold={0.5}
+                        ListFooterComponent={
+                            loadingMore ? (
+                                <View style={styles.footerLoader}>
+                                    <ActivityIndicator size="small" color={commonColors.primary} />
+                                </View>
+                            ) : null
+                        }
+                    />
+                </Fragment>
+
             )}
         </WrapperContainer>
     );

@@ -55,7 +55,7 @@ const useRTLStyles = (isRTL: boolean, theme?: ThemeType) => {
             borderWidth: 1,
         },
         buttonSection: {
-            // marginBottom: moderateScale(24),
+            marginBottom: moderateScale(24),
         },
         continueButton: {
             height: moderateScale(48),

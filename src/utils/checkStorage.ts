@@ -4,7 +4,7 @@
  * This module is responsible for initializing the app with user preferences stored in secure storage.
  */
 
-import { changeFirstTime } from "@/redux/reducers/auth";
+import { changeFirstTime, setRegisteredUsers } from "@/redux/reducers/auth";
 import { LanguageInterface, saveDefaultLanguage, saveDefaultTheme } from "@/redux/reducers/settings";
 import { setCart } from "@/redux/reducers/cart";
 import { setFavourites } from "@/redux/reducers/favourites";
@@ -77,6 +77,11 @@ export const getLocalItem = async () => {
         const favourites = await secureStorage.getObject<any[]>('FAVOURITES');
         if (favourites) {
             dispatch(setFavourites(favourites));
+        }
+
+        const registeredUsers = await secureStorage.getObject<any[]>('REGISTERED_USERS');
+        if (registeredUsers) {
+            dispatch(setRegisteredUsers(registeredUsers));
         }
     } catch (error) {
         console.log(error);

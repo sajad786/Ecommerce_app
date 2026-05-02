@@ -11,6 +11,6 @@ export const changeFirstTimeState = (isFirstTime: boolean) => {
 };
 
 export const clearDataAction = () => {
-    secureStorage.clearAll();
+    secureStorage.removeItem("IS_FIRST_TIME");
     dispatch(clearData());
 }

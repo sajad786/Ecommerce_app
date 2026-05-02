@@ -1,13 +1,16 @@
-import { BackArrowIcon, EyeIcon } from '@/assets/icons';
+import { EyeIcon } from '@/assets/icons';
 import ButtonComp from '@/components/ButtonComp';
 import TextComp from '@/components/TextComp';
 import TextInputComp from '@/components/TextInputComp';
 import WrapperContainer from '@/components/WrapperContainer';
+import { addRegisteredUser } from '@/redux/reducers/auth';
+import { secureStorage } from '@/utils/secureStorage';
 import { AuthStackParamList } from '@/navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
+    Alert,
     KeyboardAvoidingView,
     Platform,
     ScrollView,
@@ -18,6 +21,9 @@ import useRTLStyles from './styles';
 import useIsRTL from '@/hooks/useIsRTL';
 import { useTheme } from '@/context/ThemeContext';
 import HeaderComp from '@/components/HeaderComp';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { scale } from '@/styles/scaling';
 
 type SignupScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
@@ -27,7 +33,9 @@ const Signup = () => {
     const { theme } = useTheme();
     const styles = useRTLStyles(isRTL, theme);
 
+    const dispatch = useDispatch<AppDispatch>();
     const navigation = useNavigation<SignupScreenNavigationProp>();
+    const { registeredUsers } = useSelector((state: RootState) => state.auth);
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -42,8 +50,45 @@ const Signup = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = () => {
-        console.log('Form submitted:', formData);
+    const handleSubmit = async () => {
+        const { fullName, email, phone, password, confirmPassword } = formData;
+        const sanitizedEmail = email.trim().toLowerCase();
+        const sanitizedPhone = phone.trim();
+
+        if (!fullName.trim() || !sanitizedEmail || !sanitizedPhone || !password || !confirmPassword) {
+            Alert.alert('Missing details', 'Please fill all fields to continue.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert('Password mismatch', 'Password and confirm password must be same.');
+            return;
+        }
+
+        const alreadyRegistered = registeredUsers.some(
+            user => user.email.toLowerCase() === sanitizedEmail || user.phone === sanitizedPhone
+        );
+
+        if (alreadyRegistered) {
+            Alert.alert('Account exists', 'This email or phone is already registered. Please login.');
+            navigation.navigate('Login');
+            return;
+        }
+
+        const newUser = {
+            fullName: fullName.trim(),
+            email: sanitizedEmail,
+            phone: sanitizedPhone,
+            password,
+        };
+
+        const updatedUsers = [...registeredUsers, newUser];
+        await secureStorage.setObject('REGISTERED_USERS', updatedUsers);
+        dispatch(addRegisteredUser(newUser));
+
+        Alert.alert('Registered', 'Account created successfully. Verify OTP to continue.', [
+            { text: 'OK', onPress: () => navigation.navigate('OTPVerification', { phoneNumber: sanitizedPhone }) }
+        ]);
     };
 
 
@@ -52,13 +97,16 @@ const Signup = () => {
         <WrapperContainer>
             <KeyboardAvoidingView
                 style={styles.container}
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? scale(16) : 20}
             >
                 <HeaderComp customStyle={styles.header} />
                 <ScrollView
                     style={styles.scrollView}
+                    contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled"
+                    keyboardDismissMode="on-drag"
                 >
 
                     <View style={styles.headerContainer}>

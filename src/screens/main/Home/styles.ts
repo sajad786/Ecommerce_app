@@ -65,6 +65,11 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
             paddingVertical: moderateScale(20),
             alignItems: 'center',
         },
+        leftComponentText: {
+            fontSize: moderateScale(16),
+            fontFamily: fontFamily.medium,
+            color: colors.text,
+        },
     }), [isRTL, theme, colors]);
 };
 

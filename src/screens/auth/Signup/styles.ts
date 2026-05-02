@@ -53,6 +53,7 @@ const useRTLStyles = (isRTL: boolean, theme?: ThemeType) => {
         },
         formContainer: {
             gap: moderateScale(20),
+            paddingBottom: verticalScale(24),
         },
         inputGroup: {
             gap: moderateScale(10),
