@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import ButtonComp from '@/components/ButtonComp';
 import HeaderComp from '@/components/HeaderComp';
@@ -16,6 +16,7 @@ import { AuthStackParamList } from '@/navigation/types';
 import { useTheme } from '@/context/ThemeContext';
 import useRTLStyles from './styles';
 import { RootState } from '@/redux/store';
+import { changeFirstTime } from '@/redux/reducers/auth';
 
 const Login = () => {
     const isRTL = useIsRTL();
@@ -25,6 +26,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const { registeredUsers } = useSelector((state: RootState) => state.auth);
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+    const dispatch = useDispatch();
 
 
     const handleNext = () => {
@@ -50,6 +52,10 @@ const Login = () => {
 
     const handleSignUp = () => {
         navigation.navigate('Signup');
+    };
+
+    const handleSkip = () => {
+        dispatch(changeFirstTime(true));
     };
 
     return (
@@ -98,7 +104,11 @@ const Login = () => {
                             onPress={handleNext}
                             style={styles.nextButton}
                         />
-
+                        <TextComp
+                            text='SKIP'
+                            style={[styles.signUpLink, { textAlign: 'center', marginTop: 16 }]}
+                            onPress={handleSkip}
+                        />
                     </View>
                 </View>
 
