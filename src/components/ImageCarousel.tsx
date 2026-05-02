@@ -1,9 +1,11 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { View, FlatList, Image, Dimensions, StyleSheet, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { View, FlatList, Dimensions, StyleSheet, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { useTheme } from '@/context/ThemeContext';
 import { Colors, commonColors, ThemeType } from '@/styles/colors';
 import { moderateScale } from '@/styles/scaling';
 import useIsRTL from '@/hooks/useIsRTL';
+import FastImageComp from '@/components/FastImageComp';
+import FastImage from 'react-native-fast-image';
 
 interface ImageCarouselProps {
     images: string[];
@@ -45,7 +47,11 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
                 inverted={isRTL}
                 renderItem={({ item }) => (
                     <View style={styles.imageContainer}>
-                        <Image source={{ uri: item }} style={styles.image} resizeMode="contain" />
+                        <FastImageComp 
+                            source={{ uri: item, priority: FastImage.priority.high }} 
+                            style={styles.image} 
+                            resizeMode={FastImage.resizeMode.contain} 
+                        />
                     </View>
                 )}
             />

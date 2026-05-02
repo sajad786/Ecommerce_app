@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
-import { Pressable, View, StyleSheet, Dimensions, Image } from 'react-native';
+import { Pressable, View, StyleSheet, Dimensions } from 'react-native';
+import FastImageComp from '@/components/FastImageComp';
+import FastImage from 'react-native-fast-image';
 import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
 import TextComp from './TextComp';
 import { useTheme } from '@/context/ThemeContext';
@@ -43,10 +45,10 @@ const ProductCard = ({ item, index, onPress, onAddToCart, onToggleFavourite, isF
         >
             <Pressable onPress={onPress} style={styles.cardPressable}>
                 <View style={styles.imageContainer}>
-                    <Image
-                        source={{ uri: item.thumbnail }}
+                    <FastImageComp
+                        source={{ uri: item.thumbnail, priority: FastImage.priority.normal }}
                         style={styles.productImage}
-                        resizeMode="contain"
+                        resizeMode={FastImage.resizeMode.contain}
                     />
                     <Pressable style={styles.favouriteButton} onPress={onToggleFavourite} hitSlop={10}>
                         <HeartIcon isFilled={isFavourite} color={isFavourite ? commonColors.primary : colors.iconSecondary} />
@@ -57,10 +59,10 @@ const ProductCard = ({ item, index, onPress, onAddToCart, onToggleFavourite, isF
                         </View>
                     )}
                 </View>
-                
+
                 <View style={styles.cardContent}>
                     <TextComp isDynamic text={item.title} style={[styles.productName, { color: colors.text, textAlign: isRTL ? 'right' : 'left' }]} numberOfLines={2} />
-                    
+
                     <View style={[styles.ratingRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Svg width="12" height="12" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <Path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
