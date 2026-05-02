@@ -8,6 +8,8 @@ import fontFamily from '@/styles/fontFamily';
 import { moderateScale } from '@/styles/scaling';
 import { CartItem } from '@/redux/reducers/cart';
 import Svg, { Path, Line } from 'react-native-svg';
+import FastImageComp from './FastImageComp';
+import FastImage from 'react-native-fast-image';
 
 interface CartItemCardProps {
     item: CartItem;
@@ -57,7 +59,7 @@ const CartItemCard = ({ item, isFavourite, onIncrease, onDecrease, onRemove, onM
 
     return (
         <View style={[styles.container, { backgroundColor: colors.surface }]}>
-            <Image source={{ uri: item.thumbnail }} style={styles.image} resizeMode="contain" />
+            <FastImageComp source={{ uri: item.thumbnail, priority: FastImage.priority.high }} style={styles.image} resizeMode="contain" />
 
             <View style={styles.detailsContainer}>
                 <View style={[styles.headerRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>

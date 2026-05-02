@@ -4,6 +4,7 @@ import FastImageComp from '@/components/FastImageComp';
 import FastImage from 'react-native-fast-image';
 import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
 import TextComp from './TextComp';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
 import { Colors, ThemeType, commonColors } from '@/styles/colors';
@@ -17,6 +18,10 @@ interface ProductCardProps {
     index: number;
     onPress?: () => void;
     onAddToCart?: () => void;
+    onIncreaseQuantity?: () => void;
+    onDecreaseQuantity?: () => void;
+    cartQuantity?: number;
+    isOutOfStock?: boolean;
     onToggleFavourite?: () => void;
     isFavourite?: boolean;
 }
@@ -31,8 +36,20 @@ const HeartIcon = ({ isFilled, color }: { isFilled: boolean, color: string }) =>
     </Svg>
 );
 
-const ProductCard = ({ item, index, onPress, onAddToCart, onToggleFavourite, isFavourite = false }: ProductCardProps) => {
+const ProductCard = ({
+    item,
+    index,
+    onPress,
+    onAddToCart,
+    onIncreaseQuantity,
+    onDecreaseQuantity,
+    cartQuantity = 0,
+    isOutOfStock = false,
+    onToggleFavourite,
+    isFavourite = false
+}: ProductCardProps) => {
     const isRTL = useIsRTL();
+    const { t } = useTranslation();
     const { theme } = useTheme();
     const colors = Colors[theme];
     const styles = useRTLStyles(isRTL, theme);
@@ -73,6 +90,32 @@ const ProductCard = ({ item, index, onPress, onAddToCart, onToggleFavourite, isF
                     <View style={[styles.priceRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <TextComp isDynamic text={`$${item.price.toFixed(2)}`} style={[styles.price, { color: commonColors.primary }]} />
                     </View>
+
+                    {onAddToCart && (
+                        cartQuantity > 0 && onIncreaseQuantity && onDecreaseQuantity ? (
+                            <View style={styles.quantityControlContainer}>
+                                <Pressable style={styles.quantityButton} onPress={onDecreaseQuantity}>
+                                    <TextComp isDynamic text="-" style={styles.quantityButtonText} />
+                                </Pressable>
+                                <TextComp isDynamic text={cartQuantity.toString()} style={[styles.quantityText, { color: colors.text }]} />
+                                <Pressable
+                                    style={[styles.quantityButton, cartQuantity >= item.stock && styles.quantityButtonDisabled]}
+                                    onPress={onIncreaseQuantity}
+                                    disabled={cartQuantity >= item.stock}
+                                >
+                                    <TextComp isDynamic text="+" style={styles.quantityButtonText} />
+                                </Pressable>
+                            </View>
+                        ) : (
+                            <Pressable
+                                style={[styles.addToCartButton, { backgroundColor: isOutOfStock ? colors.buttonDisabled : commonColors.primary }]}
+                                onPress={onAddToCart}
+                                disabled={isOutOfStock}
+                            >
+                                <TextComp isDynamic text={isOutOfStock ? t('OUT_OF_STOCK') : t('ADD_TO_CART')} style={styles.addToCartText} />
+                            </Pressable>
+                        )
+                    )}
                 </View>
             </Pressable>
         </Animated.View>
@@ -166,6 +209,52 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
         price: {
             fontSize: moderateScale(16),
             fontFamily: fontFamily.bold,
+        },
+        addToCartButton: {
+            marginTop: moderateScale(8),
+            borderRadius: moderateScale(8),
+            paddingVertical: moderateScale(8),
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        addToCartText: {
+            color: commonColors.white,
+            fontSize: moderateScale(12),
+            fontFamily: fontFamily.semiBold,
+        },
+        quantityControlContainer: {
+            marginTop: moderateScale(8),
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderWidth: 1,
+            borderColor: colors.inputBorder,
+            borderRadius: moderateScale(8),
+            paddingHorizontal: moderateScale(8),
+            paddingVertical: moderateScale(6),
+        },
+        quantityButton: {
+            width: moderateScale(26),
+            height: moderateScale(26),
+            borderRadius: moderateScale(13),
+            backgroundColor: commonColors.primary,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        quantityButtonDisabled: {
+            backgroundColor: colors.buttonDisabled,
+        },
+        quantityButtonText: {
+            color: commonColors.white,
+            fontSize: moderateScale(16),
+            fontFamily: fontFamily.bold,
+            lineHeight: moderateScale(18),
+        },
+        quantityText: {
+            fontSize: moderateScale(14),
+            fontFamily: fontFamily.bold,
+            minWidth: moderateScale(24),
+            textAlign: 'center',
         },
     }), [isRTL, theme, colors]);
 };

@@ -9,15 +9,15 @@ import ProductCard from '@/components/ProductCard';
 import DropdownComp from '@/components/DropdownComp';
 import { RootState } from '@/redux/reducers';
 import { toggleFavourite } from '@/redux/reducers/favourites';
+import { addToCart, decreaseQuantity, increaseQuantity } from '@/redux/reducers/cart';
 import { Product } from '@/screens/main/Home/home.types';
 import AuthWrapperComponent from '@/components/AuthWrapperComponent';
 import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
 import useRTLStyles from './styles';
-import { Colors, commonColors } from '@/styles/colors';
+import { Colors } from '@/styles/colors';
 import { debounce } from '@/utils/debounce';
 import Svg, { Path } from 'react-native-svg';
-import { scale } from '@/styles/scaling';
 
 const EmptyFavouritesIcon = ({ color }: { color: string }) => (
     <Svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -42,6 +42,7 @@ const Favourites = ({ navigation }: any) => {
     const colors = Colors[theme];
 
     const favouriteItems = useSelector((state: RootState) => state.favourites.items);
+    const cartItems = useSelector((state: RootState) => state.cart.items);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -105,7 +106,23 @@ const Favourites = ({ navigation }: any) => {
         navigation.navigate('ProductDetails', { product: item });
     };
 
+    const onAddToCart = (item: Product) => {
+        dispatch(addToCart(item));
+    };
+
+    const onIncreaseQuantity = (item: Product) => {
+        dispatch(increaseQuantity(item.id));
+    };
+
+    const onDecreaseQuantity = (item: Product) => {
+        dispatch(decreaseQuantity(item.id));
+    };
+
     const renderProductCard = useCallback(({ item, index }: { item: Product; index: number }) => {
+        const cartItem = cartItems.find(cartValue => cartValue.id === item.id);
+        const cartQuantity = cartItem?.quantity ?? 0;
+        const isOutOfStock = item.stock === 0;
+
         return (
             <ProductCard
                 item={item}
@@ -113,9 +130,14 @@ const Favourites = ({ navigation }: any) => {
                 onPress={() => onPressCard(item)}
                 isFavourite={true}
                 onToggleFavourite={() => onToggleFav(item)}
+                onAddToCart={() => onAddToCart(item)}
+                onIncreaseQuantity={() => onIncreaseQuantity(item)}
+                onDecreaseQuantity={() => onDecreaseQuantity(item)}
+                cartQuantity={cartQuantity}
+                isOutOfStock={isOutOfStock}
             />
         );
-    }, [onPressCard, onToggleFav]);
+    }, [cartItems, onPressCard, onToggleFav, onAddToCart, onIncreaseQuantity, onDecreaseQuantity]);
 
     const renderEmptyState = () => {
         if (favouriteItems.length > 0 && filteredAndSortedItems.length === 0) {
