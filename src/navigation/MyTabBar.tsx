@@ -17,7 +17,7 @@ const MyTabBar = ({ state, descriptors, navigation }) => {
     const colors = Colors[theme];
     return (
         <View style={styles.container}>
-            {state?.routes.map((route, index) => {
+            {state?.routes.filter((route: any) => route.name !== 'ProductDetails').map((route: any, index: number) => {
                 const { options } = descriptors[route.key];
                 const isFocused = state.index === index;
 
