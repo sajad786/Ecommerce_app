@@ -69,5 +69,6 @@
     "ACCOUNT": "Account",
     "LOGOUT_CONFIRMATION": "Are you sure you want to logout?",
     "CANCEL": "Cancel",
-    "WELCOME": "Welcome"
+    "WELCOME": "Welcome",
+    "NO_RESULTS_FOUND": "No results found"
 }

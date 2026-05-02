@@ -70,9 +70,8 @@ const Home = ({ navigation }: any) => {
             if (search.trim() !== '') {
                 response = await homeActions.searchProducts(`?q=${search}&limit=${LIMIT}&skip=${currentSkip}`);
             } else if (category !== 'All') {
-                // If it's a category object with slug, use slug, else use string
-                const catSlug = typeof category === 'string' ? category : category.slug;
-                response = await homeActions.getProductsByCategory(catSlug, queryParam);
+                // Since category is inferred from selectedCategory (which is a string slug)
+                response = await homeActions.getProductsByCategory(category, queryParam);
             } else {
                 response = await homeActions.getProducts(queryParam);
             }
@@ -219,6 +218,10 @@ const Home = ({ navigation }: any) => {
             {loading && products.length === 0 ? (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color={commonColors.primary} />
+                </View>
+            ) : products.length === 0 ? (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <TextComp isDynamic text={t('NO_RESULTS_FOUND')} style={{ fontSize: 16, color: colors.text }} />
                 </View>
             ) : (
                 <Fragment>

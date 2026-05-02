@@ -110,12 +110,21 @@ const Favourites = ({ navigation }: any) => {
         );
     }, [onPressCard, onToggleFav]);
 
-    const renderEmptyState = () => (
-        <View style={styles.emptyContainer}>
-            <EmptyFavouritesIcon color={colors.iconSecondary} />
-            <TextComp isDynamic text={t('EMPTY_FAVOURITES')} style={styles.emptyText} />
-        </View>
-    );
+    const renderEmptyState = () => {
+        if (favouriteItems.length > 0 && filteredAndSortedItems.length === 0) {
+            return (
+                <View style={styles.emptyContainer}>
+                    <TextComp isDynamic text={t('NO_RESULTS_FOUND')} style={styles.emptyText} />
+                </View>
+            );
+        }
+        return (
+            <View style={styles.emptyContainer}>
+                <EmptyFavouritesIcon color={colors.iconSecondary} />
+                <TextComp isDynamic text={t('EMPTY_FAVOURITES')} style={styles.emptyText} />
+            </View>
+        );
+    };
 
     return (
         <WrapperContainer style={styles.container} edges={['top']}>

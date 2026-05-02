@@ -69,5 +69,6 @@
     "ACCOUNT": "الحساب",
     "LOGOUT_CONFIRMATION": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "CANCEL": "إلغاء",
-    "WELCOME": "مرحبا"
+    "WELCOME": "مرحبا",
+    "NO_RESULTS_FOUND": "لا توجد نتائج"
 }
