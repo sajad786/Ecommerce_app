@@ -81,11 +81,6 @@ export const MainStack = () => {
             <HeartIcon color={color} focused={focused} />
           ),
         }} />
-      {/* <Tab.Screen name="Profile" component={Profile} options={{
-        tabBarIcon: ({ color, focused }) => (
-          focused ? <ProfileInactiveIcon color={color} /> : <ProfileInactiveIcon color={color} />
-        ),
-      }} /> */}
       <Tab.Screen name="Settings" component={Settings} options={{
         tabBarIcon: ({ color }) => (
           <SettingsIcon fill={colors.text} width={20} height={20} />

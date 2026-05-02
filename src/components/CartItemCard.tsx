@@ -11,9 +11,11 @@ import Svg, { Path, Line } from 'react-native-svg';
 
 interface CartItemCardProps {
     item: CartItem;
+    isFavourite?: boolean;
     onIncrease: () => void;
     onDecrease: () => void;
     onRemove: () => void;
+    onMoveToFavourites: () => void;
 }
 
 const TrashIcon = ({ color }: { color: string }) => (
@@ -22,6 +24,12 @@ const TrashIcon = ({ color }: { color: string }) => (
         <Path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
         <Line x1="10" y1="11" x2="10" y2="17" />
         <Line x1="14" y1="11" x2="14" y2="17" />
+    </Svg>
+);
+
+const HeartIcon = ({ color, isFilled }: { color: string, isFilled?: boolean }) => (
+    <Svg width="20" height="20" viewBox="0 0 24 24" fill={isFilled ? color : "none"} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
     </Svg>
 );
 
@@ -38,7 +46,7 @@ const MinusIcon = ({ color }: { color: string }) => (
     </Svg>
 );
 
-const CartItemCard = ({ item, onIncrease, onDecrease, onRemove }: CartItemCardProps) => {
+const CartItemCard = ({ item, isFavourite, onIncrease, onDecrease, onRemove, onMoveToFavourites }: CartItemCardProps) => {
     const isRTL = useIsRTL();
     const { theme } = useTheme();
     const colors = Colors[theme];
@@ -50,13 +58,18 @@ const CartItemCard = ({ item, onIncrease, onDecrease, onRemove }: CartItemCardPr
     return (
         <View style={[styles.container, { backgroundColor: colors.surface }]}>
             <Image source={{ uri: item.thumbnail }} style={styles.image} resizeMode="contain" />
-            
+
             <View style={styles.detailsContainer}>
                 <View style={[styles.headerRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     <TextComp text={item.title} isDynamic style={[styles.title, { color: colors.text, textAlign: isRTL ? 'right' : 'left' }]} numberOfLines={2} />
-                    <Pressable onPress={onRemove} hitSlop={10} style={styles.removeBtn}>
-                        <TrashIcon color={commonColors.error} />
-                    </Pressable>
+                    <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center' }}>
+                        <Pressable onPress={onMoveToFavourites} hitSlop={10} style={[styles.removeBtn, { marginRight: 8 }]}>
+                            <HeartIcon color={commonColors.primary} isFilled={isFavourite} />
+                        </Pressable>
+                        <Pressable onPress={onRemove} hitSlop={10} style={styles.removeBtn}>
+                            <TrashIcon color={commonColors.error} />
+                        </Pressable>
+                    </View>
                 </View>
 
                 <View style={[styles.priceRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
@@ -65,18 +78,18 @@ const CartItemCard = ({ item, onIncrease, onDecrease, onRemove }: CartItemCardPr
 
                 <View style={[styles.controlsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     <View style={[styles.quantityContainer, { flexDirection: isRTL ? 'row-reverse' : 'row', borderColor: colors.inputBorder }]}>
-                        <Pressable 
-                            style={[styles.qtyBtn, isMinQuantity && styles.qtyBtnDisabled]} 
+                        <Pressable
+                            style={[styles.qtyBtn, isMinQuantity && styles.qtyBtnDisabled]}
                             onPress={onDecrease}
                             disabled={isMinQuantity}
                         >
                             <MinusIcon color={isMinQuantity ? colors.iconSecondary : colors.text} />
                         </Pressable>
-                        
+
                         <TextComp text={item.quantity.toString()} isDynamic style={[styles.qtyText, { color: colors.text }]} />
-                        
-                        <Pressable 
-                            style={[styles.qtyBtn, isMaxQuantity && styles.qtyBtnDisabled]} 
+
+                        <Pressable
+                            style={[styles.qtyBtn, isMaxQuantity && styles.qtyBtnDisabled]}
                             onPress={onIncrease}
                             disabled={isMaxQuantity}
                         >

@@ -5,10 +5,10 @@ import { StyleSheet } from 'react-native';
 import { useMemo } from 'react';
 
 const useRTLStyles = (isRTL: boolean, theme?: ThemeType) => {
-    const colors = Colors[theme];
+    const colors = Colors[theme ?? 'light'];
 
     return useMemo(() => StyleSheet.create({
-     
+
         container: {
             flex: 1,
             backgroundColor: colors.background,

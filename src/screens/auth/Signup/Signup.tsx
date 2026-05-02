@@ -3,7 +3,7 @@ import ButtonComp from '@/components/ButtonComp';
 import TextComp from '@/components/TextComp';
 import TextInputComp from '@/components/TextInputComp';
 import WrapperContainer from '@/components/WrapperContainer';
-import { addRegisteredUser } from '@/redux/reducers/auth';
+import { setRegisteredUsers } from '@/redux/reducers/auth';
 import { secureStorage } from '@/utils/secureStorage';
 import { AuthStackParamList } from '@/navigation/types';
 import { useNavigation } from '@react-navigation/native';
@@ -65,15 +65,7 @@ const Signup = () => {
             return;
         }
 
-        const alreadyRegistered = registeredUsers.some(
-            user => user.email.toLowerCase() === sanitizedEmail || user.phone === sanitizedPhone
-        );
 
-        if (alreadyRegistered) {
-            Alert.alert('Account exists', 'This email or phone is already registered. Please login.');
-            navigation.navigate('Login');
-            return;
-        }
 
         const newUser = {
             fullName: fullName.trim(),
@@ -82,9 +74,9 @@ const Signup = () => {
             password,
         };
 
-        const updatedUsers = [...registeredUsers, newUser];
+        const updatedUsers = [newUser];
         await secureStorage.setObject('REGISTERED_USERS', updatedUsers);
-        dispatch(addRegisteredUser(newUser));
+        dispatch(setRegisteredUsers(updatedUsers));
 
         Alert.alert('Registered', 'Account created successfully. Verify OTP to continue.', [
             { text: 'OK', onPress: () => navigation.navigate('OTPVerification', { phoneNumber: sanitizedPhone }) }

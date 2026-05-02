@@ -6,15 +6,17 @@ import HeaderComp from '@/components/HeaderComp';
 import WrapperContainer from '@/components/WrapperContainer';
 import TextComp from '@/components/TextComp';
 import ProductCard from '@/components/ProductCard';
+import DropdownComp from '@/components/DropdownComp';
 import { RootState } from '@/redux/reducers';
 import { toggleFavourite } from '@/redux/reducers/favourites';
 import { Product } from '@/screens/main/Home/home.types';
 import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
 import useRTLStyles from './styles';
-import { Colors } from '@/styles/colors';
+import { Colors, commonColors } from '@/styles/colors';
 import { debounce } from '@/utils/debounce';
 import Svg, { Path } from 'react-native-svg';
+import { scale } from '@/styles/scaling';
 
 const EmptyFavouritesIcon = ({ color }: { color: string }) => (
     <Svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -56,7 +58,7 @@ const Favourites = ({ navigation }: any) => {
 
     const filteredAndSortedItems = useMemo(() => {
         let items = [...favouriteItems];
-        
+
         // Search with debounced query
         if (debouncedQuery.trim() !== '') {
             const query = debouncedQuery.toLowerCase();
@@ -75,18 +77,22 @@ const Favourites = ({ navigation }: any) => {
         return items;
     }, [favouriteItems, debouncedQuery, sortOrder]);
 
-    const handleSortToggle = () => {
-        if (sortOrder === 'none') setSortOrder('price_asc');
-        else if (sortOrder === 'price_asc') setSortOrder('price_desc');
-        else if (sortOrder === 'price_desc') setSortOrder('rating');
-        else setSortOrder('none');
+    const handleSortSelect = (option: string) => {
+        setSortOrder(option as 'none' | 'price_asc' | 'price_desc' | 'rating');
     };
 
+    const sortOptions = [
+        { label: t('DEFAULT'), value: 'none' },
+        { label: t('SORT_PRICE_LOW_HIGH'), value: 'price_asc' },
+        { label: t('SORT_PRICE_HIGH_LOW'), value: 'price_desc' },
+        { label: t('SORT_RATING'), value: 'rating' },
+    ];
+
     const getSortText = () => {
-        if (sortOrder === 'none') return t('SORT');
-        if (sortOrder === 'price_asc') return t('SORT') + ' (Price: Low-High)';
-        if (sortOrder === 'price_desc') return t('SORT') + ' (Price: High-Low)';
-        if (sortOrder === 'rating') return t('SORT') + ' (Rating)';
+        if (sortOrder === 'none') return t('DEFAULT');
+        if (sortOrder === 'price_asc') return t('SORT_PRICE_LOW_HIGH');
+        if (sortOrder === 'price_desc') return t('SORT_PRICE_HIGH_LOW');
+        if (sortOrder === 'rating') return t('SORT_RATING');
         return t('SORT');
     };
 
@@ -100,10 +106,10 @@ const Favourites = ({ navigation }: any) => {
 
     const renderProductCard = useCallback(({ item, index }: { item: Product; index: number }) => {
         return (
-            <ProductCard 
-                item={item} 
-                index={index} 
-                onPress={() => onPressCard(item)} 
+            <ProductCard
+                item={item}
+                index={index}
+                onPress={() => onPressCard(item)}
                 isFavourite={true}
                 onToggleFavourite={() => onToggleFav(item)}
             />
@@ -131,18 +137,33 @@ const Favourites = ({ navigation }: any) => {
             <HeaderComp showBack={false} title={t('FAVOURITES')} />
 
             {favouriteItems.length > 0 && (
-                <View style={styles.filterContainer}>
-                    <TextInput
-                        style={[styles.searchInput, { color: colors.text }]}
-                        placeholder={t('SEARCH')}
-                        placeholderTextColor={colors.inputPlaceholder}
-                        value={searchQuery}
-                        onChangeText={handleSearch}
+                <View style={[styles.filterContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                    <View style={{ flex: 1 }}>
+                        <TextInput
+                            style={[styles.searchInput, { color: colors.text }]}
+                            placeholder={t('SEARCH')}
+                            placeholderTextColor={colors.inputPlaceholder}
+                            value={searchQuery}
+                            onChangeText={handleSearch}
+                        />
+                    </View>
+                    <DropdownComp
+                        data={sortOptions}
+                        selectedValue={sortOrder}
+                        onSelect={handleSortSelect}
+                        dropdownWidth={220}
+                        renderTrigger={(onPress) => (
+                            <Pressable style={styles.sortButton} onPress={onPress}>
+                                {sortOrder !== 'none' && (
+                                    <View style={styles.dot} />
+                                )}
+                                <View>
+                                    <SortIcon color={colors.text} />
+
+                                </View>
+                            </Pressable>
+                        )}
                     />
-                    <Pressable style={styles.sortButton} onPress={handleSortToggle}>
-                        <SortIcon color={colors.text} />
-                        <TextComp text={getSortText()} style={styles.sortText} isDynamic={true} />
-                    </Pressable>
                 </View>
             )}
 

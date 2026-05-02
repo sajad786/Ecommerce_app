@@ -10,7 +10,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 
 // create a component
-const MyTabBar = ({ state, descriptors, navigation }) => {
+const MyTabBar = ({ state, descriptors, navigation }: any) => {
     const isRTL = useIsRTL();
     const { theme } = useTheme();
     const styles = useRTLStyles(isRTL, theme);

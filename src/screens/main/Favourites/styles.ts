@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { ThemeType, Colors } from '@/styles/colors';
-import { moderateScale } from '@/styles/scaling';
+import { ThemeType, Colors, commonColors } from '@/styles/colors';
+import { moderateScale, scale } from '@/styles/scaling';
 import fontFamily from '@/styles/fontFamily';
 import { useMemo } from 'react';
 
@@ -63,6 +63,17 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
             color: colors.text,
             marginHorizontal: moderateScale(6),
         },
+        dot: {
+            position: 'absolute',
+            top: scale(-4),
+            right: scale(2),
+            width: scale(12),
+            height: scale(12),
+            borderRadius: scale(6),
+            backgroundColor: commonColors.error,
+            borderWidth: 1.5,
+            borderColor: colors.surface
+        }
     }), [isRTL, theme, colors]);
 };
 

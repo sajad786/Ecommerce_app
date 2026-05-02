@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import TextComp from '@/components/TextComp';
 import WrapperContainer from '@/components/WrapperContainer';
 import HeaderComp from '@/components/HeaderComp';
+import DropdownComp from '@/components/DropdownComp';
 import { useTheme } from '@/context/ThemeContext';
 import { Colors, commonColors } from '@/styles/colors';
 import useIsRTL from '@/hooks/useIsRTL';
@@ -39,6 +40,12 @@ const LogoutIcon = ({ color }: { color: string }) => (
     </Svg>
 );
 
+const ChevronDownIcon = ({ color }: { color: string }) => (
+    <Svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <Path d="M6 9l6 6 6-6" />
+    </Svg>
+);
+
 const SettingsScreen = () => {
     const { t } = useTranslation();
     const isRTL = useIsRTL();
@@ -55,8 +62,14 @@ const SettingsScreen = () => {
         changeThemeState(isDarkMode ? 'light' : 'dark');
     };
 
-    const handleLanguageToggle = () => {
-        const newLang = defaultLanguage.sortName === 'en' 
+    const languageOptions = [
+        { label: 'English', value: 'en' },
+        { label: 'Arabic', value: 'ar' }
+    ];
+
+    const handleLanguageSelect = (value: string) => {
+        if (value === defaultLanguage.sortName) return;
+        const newLang = value === 'ar'
             ? { name: 'Arabic', sortName: 'ar' }
             : { name: 'English', sortName: 'en' };
         changeLanguageState(newLang);
@@ -68,8 +81,8 @@ const SettingsScreen = () => {
             t('LOGOUT_CONFIRMATION'),
             [
                 { text: t('CANCEL'), style: 'cancel' },
-                { 
-                    text: t('LOGOUT'), 
+                {
+                    text: t('LOGOUT'),
                     style: 'destructive',
                     onPress: () => {
                         clearDataAction();
@@ -105,32 +118,42 @@ const SettingsScreen = () => {
 
                 <View style={styles.section}>
                     <TextComp text={t('PREFERENCES')} isDynamic style={styles.sectionTitle} />
-                    <Pressable style={styles.settingItem} onPress={handleLanguageToggle}>
-                        <View style={styles.itemLeft}>
-                            <View style={[styles.iconContainer, { backgroundColor: colors.inputBorder }]}>
-                                <GlobeIcon color={colors.text} />
-                            </View>
-                            <TextComp text={t('LANGUAGE')} isDynamic style={styles.itemText} />
-                        </View>
-                        <View style={styles.languagePill}>
-                            <TextComp 
-                                text={defaultLanguage.name} 
-                                isDynamic 
-                                style={styles.languageText} 
-                            />
-                        </View>
-                    </Pressable>
+                    <DropdownComp
+                        data={languageOptions}
+                        selectedValue={defaultLanguage?.sortName}
+                        onSelect={handleLanguageSelect}
+                        dropdownWidth={moderateScale(120)}
+                        align={isRTL ? 'left' : 'right'}
+                        renderTrigger={(onPress) => (
+                            <Pressable style={styles.settingItem} onPress={onPress}>
+                                <View style={styles.itemLeft}>
+                                    <View style={[styles.iconContainer, { backgroundColor: colors.inputBorder }]}>
+                                        <GlobeIcon color={colors.text} />
+                                    </View>
+                                    <TextComp text={t('LANGUAGE')} isDynamic style={styles.itemText} />
+                                </View>
+                                <View style={[styles.languagePill, { flexDirection: 'row', alignItems: 'center' }]}>
+                                    <TextComp
+                                        text={defaultLanguage.name}
+                                        isDynamic
+                                        style={[styles.languageText, { marginRight: moderateScale(4) }]}
+                                    />
+                                    <ChevronDownIcon color={colors.textSecondary} />
+                                </View>
+                            </Pressable>
+                        )}
+                    />
                 </View>
 
                 <View style={styles.divider} />
 
                 <View style={styles.section}>
                     <TextComp text={t('ACCOUNT')} isDynamic style={styles.sectionTitle} />
-                    <Pressable 
+                    <Pressable
                         style={({ pressed }) => [
                             styles.settingItem,
                             pressed && styles.itemPressed
-                        ]} 
+                        ]}
                         onPress={handleLogout}
                     >
                         <View style={styles.itemLeft}>

@@ -126,23 +126,7 @@ const ProductDetails = ({ route, navigation }: any) => {
 
     return (
         <WrapperContainer style={styles.container} edges={['top', 'bottom']}>
-            {/* <HeaderComp
-                showBack={true}
-                onBackPress={() => navigation.goBack()}
-                title="Product Details"
-                rightComponent={
-                    <AnimatedPressable
-                        onPress={handleToggleFavourite}
-                        hitSlop={10}
-                        style={{ transform: [{ scale: favScaleValue }] }}
-                    >
-                        <HeartIcon isFilled={isFavourite} color={isFavourite ? commonColors.secondary : colors.text} />
-                    </AnimatedPressable>
-                }
-            /> */}
-
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-
                 <Pressable
                     onPress={() => navigation.goBack()}
                     hitSlop={10}

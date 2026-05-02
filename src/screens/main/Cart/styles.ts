@@ -21,6 +21,19 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
             justifyContent: 'center',
             alignItems: 'center',
         },
+        countsContainer: {
+            paddingHorizontal: moderateScale(16),
+            paddingVertical: moderateScale(12),
+            backgroundColor: colors.surface,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.inputBorder,
+        },
+        countsText: {
+            fontSize: moderateScale(14),
+            fontFamily: fontFamily.medium,
+            color: colors.textSecondary,
+            textAlign: isRTL ? 'right' : 'left',
+        },
         emptyText: {
             fontSize: moderateScale(16),
             fontFamily: fontFamily.medium,

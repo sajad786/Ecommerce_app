@@ -62,12 +62,17 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({ route }) => {
                                     values={{ phoneNumber }}
                                     style={styles.subtitle}
                                 />
+                                <TextComp
+                                    text='DEFAULT_OTP'
+                                    values={{ phoneNumber }}
+                                    style={styles.subtitle}
+                                />
                             </View>
 
                             {/* OTP Input Section */}
                             <View style={styles.otpSection}>
                                 <OtpInput
-                                    numberOfDigits={6}
+                                    numberOfDigits={5}
                                     onTextChange={setOtp}
                                     autoFocus={true}
                                     theme={{

@@ -70,5 +70,12 @@
     "LOGOUT_CONFIRMATION": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "CANCEL": "إلغاء",
     "WELCOME": "مرحبا",
-    "NO_RESULTS_FOUND": "لا توجد نتائج"
+    "NO_RESULTS_FOUND": "لا توجد نتائج",
+    "DEFAULT": "الافتراضي",
+    "SORT_PRICE_LOW_HIGH": "الترتيب حسب (السعر: من الأقل للأعلى)",
+    "SORT_PRICE_HIGH_LOW": "الترتيب حسب (السعر: من الأعلى للأقل)",
+    "SORT_RATING": "الترتيب حسب (التقييم)",
+    "CART_ITEMS_COUNT": "العربة: {{count}} عنصر(عناصر)",
+    "FAVOURITES_ITEMS_COUNT": "المفضلة: {{count}} عنصر(عناصر)",
+    "DEFAULT_OTP": "الرقم الافتراضي للتحقق هو 12345"
 }

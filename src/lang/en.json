@@ -70,5 +70,12 @@
     "LOGOUT_CONFIRMATION": "Are you sure you want to logout?",
     "CANCEL": "Cancel",
     "WELCOME": "Welcome",
-    "NO_RESULTS_FOUND": "No results found"
+    "NO_RESULTS_FOUND": "No results found",
+    "DEFAULT": "Default",
+    "SORT_PRICE_LOW_HIGH": "Price: Low-High",
+    "SORT_PRICE_HIGH_LOW": "Price: High-Low",
+    "SORT_RATING": "Rating",
+    "CART_ITEMS_COUNT": "Cart: {{count}} item(s)",
+    "FAVOURITES_ITEMS_COUNT": "Favourites: {{count}} item(s)",
+    "DEFAULT_OTP": "The default otp for testing is 12345"
 }

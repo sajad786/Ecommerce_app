@@ -8,6 +8,7 @@ import TextComp from '@/components/TextComp';
 import CartItemCard from '@/components/CartItemCard';
 import { RootState } from '@/redux/reducers';
 import { increaseQuantity, decreaseQuantity, removeFromCart } from '@/redux/reducers/cart';
+import { toggleFavourite } from '@/redux/reducers/favourites';
 import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
 import useRTLStyles from './styles';
@@ -31,6 +32,8 @@ const Cart = () => {
     const colors = Colors[theme];
 
     const cartItems = useSelector((state: RootState) => state.cart.items);
+
+    const favouriteItems = useSelector((state: RootState) => state.favourites.items);
 
     const subtotal = useMemo(() => {
         return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -58,6 +61,10 @@ const Cart = () => {
         dispatch(removeFromCart(id));
     };
 
+    const handleMoveToFavourites = (item: any) => {
+        dispatch(toggleFavourite(item));
+    };
+
     const renderEmptyState = () => (
         <View style={styles.emptyContainer}>
             <EmptyCartIcon color={colors.iconSecondary} />
@@ -68,6 +75,14 @@ const Cart = () => {
     return (
         <WrapperContainer style={styles.container} edges={['top']}>
             <HeaderComp showBack={false} title={t('CART')} />
+
+            <View style={styles.countsContainer}>
+                <TextComp
+                    isDynamic
+                    text={`${t('CART_ITEMS_COUNT', { count: cartItems.length })} | ${t('FAVOURITES_ITEMS_COUNT', { count: favouriteItems.length })}`}
+                    style={styles.countsText}
+                />
+            </View>
 
             {cartItems.length === 0 ? (
                 renderEmptyState()
@@ -81,28 +96,30 @@ const Cart = () => {
                         renderItem={({ item }) => (
                             <CartItemCard
                                 item={item}
+                                isFavourite={favouriteItems.some(fav => fav.id === item.id)}
                                 onIncrease={() => handleIncrease(item.id)}
                                 onDecrease={() => handleDecrease(item.id)}
                                 onRemove={() => handleRemove(item.id)}
+                                onMoveToFavourites={() => handleMoveToFavourites(item)}
                             />
                         )}
                     />
 
                     <View style={styles.checkoutContainer}>
                         <TextComp isDynamic text={t('PRICE_BREAKDOWN')} style={styles.breakdownTitle} />
-                        
+
                         <View style={styles.priceRow}>
                             <TextComp isDynamic text={t('SUBTOTAL')} style={styles.priceLabel} />
                             <TextComp isDynamic text={`$${(subtotal + discountAmount).toFixed(2)}`} style={styles.priceValue} />
                         </View>
-                        
+
                         <View style={styles.priceRow}>
                             <TextComp isDynamic text={t('DISCOUNT')} style={styles.priceLabel} />
                             <TextComp isDynamic text={`-$${discountAmount.toFixed(2)}`} style={[styles.priceValue, { color: commonColors.success }]} />
                         </View>
-                        
+
                         <View style={styles.divider} />
-                        
+
                         <View style={styles.priceRow}>
                             <TextComp isDynamic text={t('TOTAL')} style={styles.totalLabel} />
                             <TextComp isDynamic text={`$${subtotal.toFixed(2)}`} style={styles.totalValue} />
