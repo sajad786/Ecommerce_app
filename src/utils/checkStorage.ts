@@ -6,6 +6,8 @@
 
 import { changeFirstTime } from "@/redux/reducers/auth";
 import { LanguageInterface, saveDefaultLanguage, saveDefaultTheme } from "@/redux/reducers/settings";
+import { setCart } from "@/redux/reducers/cart";
+import { setFavourites } from "@/redux/reducers/favourites";
 import store from "@/redux/store";
 import i18next from "i18next";
 import { secureStorage } from "./secureStorage";
@@ -64,6 +66,17 @@ export const getLocalItem = async () => {
             const systemTheme = 'light';
             await secureStorage.setItem('THEME', systemTheme);
             dispatch(saveDefaultTheme({ myTheme: systemTheme }));
+        }
+
+        // Get saved Cart and Favourites
+        const cart = await secureStorage.getObject<any[]>('CART');
+        if (cart) {
+            dispatch(setCart(cart));
+        }
+
+        const favourites = await secureStorage.getObject<any[]>('FAVOURITES');
+        if (favourites) {
+            dispatch(setFavourites(favourites));
         }
     } catch (error) {
         console.log(error);

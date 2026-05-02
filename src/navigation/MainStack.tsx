@@ -21,15 +21,15 @@ const Tab = createBottomTabNavigator<MainStackParamList>();
 
 const CartIcon = ({ color, focused }: { color: string, focused: boolean }) => (
   <Svg width="24" height="24" viewBox="0 0 24 24" fill={focused ? color : "none"} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <Circle cx="9" cy="21" r="1" />
-      <Circle cx="20" cy="21" r="1" />
-      <Path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+    <Circle cx="9" cy="21" r="1" />
+    <Circle cx="20" cy="21" r="1" />
+    <Path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
   </Svg>
 );
 
 const HeartIcon = ({ color, focused }: { color: string, focused: boolean }) => (
   <Svg width="24" height="24" viewBox="0 0 24 24" fill={focused ? color : "none"} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    <Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
   </Svg>
 );
 
@@ -75,11 +75,11 @@ export const MainStack = () => {
             <HeartIcon color={color} focused={focused} />
           ),
         }} />
-      <Tab.Screen name="Profile" component={Profile} options={{
+      {/* <Tab.Screen name="Profile" component={Profile} options={{
         tabBarIcon: ({ color, focused }) => (
           focused ? <ProfileInactiveIcon color={color} /> : <ProfileInactiveIcon color={color} />
         ),
-      }} />
+      }} /> */}
       <Tab.Screen name="Settings" component={Settings} options={{
         tabBarIcon: ({ color }) => (
           <SettingsIcon fill={colors.text} width={20} height={20} />

@@ -33,9 +33,13 @@ const MyTabBar = ({ state, descriptors, navigation }) => {
                     navigation.emit({ type: 'tabLongPress', target: route.key });
                 };
 
+                const iconColor = isFocused ? commonColors.primary : colors.inputPlaceholder;
+
                 const icon = options.tabBarIcon
                     ? options.tabBarIcon({
                         focused: isFocused,
+                        color: iconColor,
+                        size: 24,
                     })
                     : null;
                 return (

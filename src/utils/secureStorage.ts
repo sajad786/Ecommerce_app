@@ -1,12 +1,13 @@
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
-// Storage keys
 export const STORAGE_KEYS = {
   AUTH_TOKEN: 'auth_token',
   USER_DATA: 'user_data',
   IS_FIRST_TIME: 'is_first_time',
   LANGUAGE: 'language',
   THEME: 'theme',
+  CART: 'cart',
+  FAVOURITES: 'favourites',
 } as const;
 
 export type StorageKeyType = keyof typeof STORAGE_KEYS;

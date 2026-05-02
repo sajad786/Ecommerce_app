@@ -6,6 +6,7 @@ import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
 import * as homeActions from '@/redux/actions/home';
 import { commonColors, Colors } from '@/styles/colors';
+import { debounce } from '@/utils/debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, RefreshControl, View, TextInput, Pressable } from 'react-native';
 import { Product, ProductsResponse } from './home.types';
@@ -107,20 +108,29 @@ const Home = ({ navigation }: any) => {
         }
     };
 
+    const debouncedFetchProducts = useCallback(
+        debounce((skipVal: number, isRef: boolean, cat: string, search: string) => {
+            fetchProducts(skipVal, isRef, cat, search);
+        }, 500),
+        []
+    );
+
     const handleSearch = (text: string) => {
         setSearchQuery(text);
         setSkip(0);
-        // Debounce would be ideal here, but for simplicity we fetch directly or rely on submit
+        debouncedFetchProducts(0, false, selectedCategory, text);
     };
 
     const onSubmitSearch = () => {
+        setSkip(0);
         fetchProducts(0, false, selectedCategory, searchQuery);
     };
 
     const selectCategory = (category: any) => {
         const catSlug = typeof category === 'string' ? category : category.slug;
         setSelectedCategory(catSlug);
-        setSearchQuery(''); // Clear search when category changes
+        setSearchQuery('');
+        setSkip(0);
         fetchProducts(0, false, catSlug, '');
     };
 
