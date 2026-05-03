@@ -14,8 +14,8 @@ export const Routes = () => {
     const { isFirstTime } = useSelector((state: RootState) => state.auth);
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }} id={undefined}>
+        <NavigationContainer >
+            <Stack.Navigator initialRouteName={isFirstTime ? 'Main' : 'Auth'} screenOptions={{ headerShown: false }} id={undefined}>
                 {isFirstTime ? (
                     <Stack.Screen name="Main" component={MainStack} />
                 ) : (

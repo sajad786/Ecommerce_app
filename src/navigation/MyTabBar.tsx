@@ -7,10 +7,12 @@ import { Colors, commonColors, ThemeType } from '@/styles/colors';
 import { moderateScale } from '@/styles/scaling';
 import React, { useMemo } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 
 // create a component
 const MyTabBar = ({ state, descriptors, navigation }: any) => {
+    const { t } = useTranslation();
     const isRTL = useIsRTL();
     const { theme } = useTheme();
     const styles = useRTLStyles(isRTL, theme);
@@ -42,6 +44,14 @@ const MyTabBar = ({ state, descriptors, navigation }: any) => {
                         size: 24,
                     })
                     : null;
+
+                const labelFromOptions = options.tabBarLabel;
+                const fallbackLabel = t(route.name.toUpperCase());
+                const label =
+                    typeof labelFromOptions === 'string'
+                        ? labelFromOptions
+                        : fallbackLabel;
+
                 return (
                     <TouchableOpacity
                         key={index}
@@ -55,7 +65,7 @@ const MyTabBar = ({ state, descriptors, navigation }: any) => {
                     >
                         {icon}
                         <TextComp
-                            text={route.name}
+                            text={label}
                             style={{
                                 color: isFocused ? commonColors.primary : colors.inputPlaceholder,
                                 marginTop: moderateScale(8)

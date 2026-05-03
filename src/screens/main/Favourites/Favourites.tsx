@@ -17,21 +17,7 @@ import useIsRTL from '@/hooks/useIsRTL';
 import useRTLStyles from './styles';
 import { Colors } from '@/styles/colors';
 import { debounce } from '@/utils/debounce';
-import Svg, { Path } from 'react-native-svg';
-
-const EmptyFavouritesIcon = ({ color }: { color: string }) => (
-    <Svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-    </Svg>
-);
-
-const SortIcon = ({ color }: { color: string }) => (
-    <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M3 6h18" />
-        <Path d="M7 12h10" />
-        <Path d="M10 18h4" />
-    </Svg>
-);
+import { EmptyFavouritesIcon, SortIcon } from '@/assets/svgIcons';
 
 const Favourites = ({ navigation }: any) => {
     const { t } = useTranslation();

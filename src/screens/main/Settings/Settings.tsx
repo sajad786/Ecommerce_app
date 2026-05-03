@@ -13,38 +13,13 @@ import useRTLStyles from './styles';
 import { RootState } from '@/redux/reducers';
 import { changeThemeState, changeLanguageState } from '@/redux/actions/settings';
 import { clearDataAction } from '@/redux/actions/auth';
-import Svg, { Path, Circle } from 'react-native-svg';
 import { moderateScale } from '@/styles/scaling';
+import { ChevronDownIcon, GlobeIcon, LogoutIcon, MoonIcon } from '@/assets/svgIcons';
 
 interface SettingsModalProps {
     isVisible: boolean;
     onClose: () => void;
 }
-
-const MoonIcon = ({ color }: { color: string }) => (
-    <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-    </Svg>
-);
-
-const GlobeIcon = ({ color }: { color: string }) => (
-    <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Circle cx="12" cy="12" r="10" />
-        <Path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-    </Svg>
-);
-
-const LogoutIcon = ({ color }: { color: string }) => (
-    <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
-    </Svg>
-);
-
-const ChevronDownIcon = ({ color }: { color: string }) => (
-    <Svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M6 9l6 6 6-6" />
-    </Svg>
-);
 
 const SettingsScreen = () => {
     const { t } = useTranslation();

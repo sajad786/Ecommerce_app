@@ -7,9 +7,9 @@ import { Colors, ThemeType, commonColors } from '@/styles/colors';
 import fontFamily from '@/styles/fontFamily';
 import { moderateScale } from '@/styles/scaling';
 import { CartItem } from '@/redux/reducers/cart';
-import Svg, { Path, Line } from 'react-native-svg';
 import FastImageComp from './FastImageComp';
 import FastImage from 'react-native-fast-image';
+import { HeartIcon, MinusIcon, PlusIcon, TrashIcon } from '@/assets/svgIcons';
 
 interface CartItemCardProps {
     item: CartItem;
@@ -19,34 +19,6 @@ interface CartItemCardProps {
     onRemove: () => void;
     onMoveToFavourites: () => void;
 }
-
-const TrashIcon = ({ color }: { color: string }) => (
-    <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M3 6h18" />
-        <Path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-        <Line x1="10" y1="11" x2="10" y2="17" />
-        <Line x1="14" y1="11" x2="14" y2="17" />
-    </Svg>
-);
-
-const HeartIcon = ({ color, isFilled }: { color: string, isFilled?: boolean }) => (
-    <Svg width="20" height="20" viewBox="0 0 24 24" fill={isFilled ? color : "none"} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-    </Svg>
-);
-
-const PlusIcon = ({ color }: { color: string }) => (
-    <Svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Line x1="12" y1="5" x2="12" y2="19" />
-        <Line x1="5" y1="12" x2="19" y2="12" />
-    </Svg>
-);
-
-const MinusIcon = ({ color }: { color: string }) => (
-    <Svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Line x1="5" y1="12" x2="19" y2="12" />
-    </Svg>
-);
 
 const CartItemCard = ({ item, isFavourite, onIncrease, onDecrease, onRemove, onMoveToFavourites }: CartItemCardProps) => {
     const isRTL = useIsRTL();

@@ -11,7 +11,7 @@ import { Colors, ThemeType, commonColors } from '@/styles/colors';
 import fontFamily from '@/styles/fontFamily';
 import { moderateScale } from '@/styles/scaling';
 import { Product } from '@/screens/main/Home/home.types';
-import Svg, { Path } from 'react-native-svg';
+import { HeartIcon, StarIcon } from '@/assets/svgIcons';
 
 interface ProductCardProps {
     item: Product;
@@ -29,12 +29,6 @@ interface ProductCardProps {
 const { width } = Dimensions.get('window');
 const CARD_MARGIN = moderateScale(8);
 const CARD_WIDTH = (width - moderateScale(32) - CARD_MARGIN * 2) / 2;
-
-const HeartIcon = ({ isFilled, color }: { isFilled: boolean, color: string }) => (
-    <Svg width="20" height="20" viewBox="0 0 24 24" fill={isFilled ? color : "none"} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-    </Svg>
-);
 
 const ProductCard = ({
     item,
@@ -81,9 +75,7 @@ const ProductCard = ({
                     <TextComp isDynamic text={item.title} style={[styles.productName, { color: colors.text, textAlign: isRTL ? 'right' : 'left' }]} numberOfLines={2} />
 
                     <View style={[styles.ratingRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <Svg width="12" height="12" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <Path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                        </Svg>
+                        <StarIcon color="#FFD700" size={12} />
                         <TextComp isDynamic text={item.rating.toFixed(1)} style={[styles.ratingText, { color: colors.textSecondary }]} />
                     </View>
 

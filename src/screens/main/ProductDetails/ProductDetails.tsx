@@ -14,24 +14,12 @@ import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
 import useRTLStyles from './styles';
 import { Colors, commonColors } from '@/styles/colors';
-import Svg, { Path } from 'react-native-svg';
 import { scale } from '@/styles/scaling';
+import { BackIcon, HeartIcon, StarIcon } from '@/assets/svgIcons';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
-const HeartIcon = ({ isFilled, color }: { isFilled: boolean, color: string }) => (
-    <Svg width="24" height="24" viewBox="0 0 24 24" fill={isFilled ? color : "none"} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-    </Svg>
-);
-
-const BackIcon = ({ color }: { color: string }) => (
-    <Svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <Path d="M15 18l-6-6 6-6" />
-    </Svg>
-);
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -151,7 +139,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                         transform: [{ scale: favScaleValue }]
                     }}
                 >
-                    <HeartIcon isFilled={isFavourite} color={isFavourite ? commonColors.primary : colors.text} />
+                    <HeartIcon size={24} isFilled={isFavourite} color={isFavourite ? commonColors.primary : colors.text} />
                 </AnimatedPressable>
 
                 <ImageCarousel images={product.images} />
@@ -162,9 +150,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                     </View>
 
                     <View style={[styles.ratingRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <Svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <Path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                        </Svg>
+                        <StarIcon color="#FFD700" />
                         <TextComp isDynamic text={product.rating.toFixed(1)} style={styles.ratingText} />
                         <TextComp isDynamic text={`(${product.reviews?.length || 0} ${t('REVIEWS')})`} style={styles.reviewsText} />
                     </View>
