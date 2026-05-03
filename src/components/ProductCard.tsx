@@ -50,66 +50,68 @@ const ProductCard = ({
 
     return (
         <Animated.View
-            style={[styles.card, { backgroundColor: colors.surface }]}
+            style={[styles.cardShadowShell, { backgroundColor: colors.surface }]}
             entering={FadeInDown.delay((index % 10) * 100).springify()}
             exiting={FadeOut}
         >
-            <Pressable onPress={onPress} style={styles.cardPressable}>
-                <View style={styles.imageContainer}>
-                    <FastImageComp
-                        source={{ uri: item.thumbnail, priority: FastImage.priority.normal }}
-                        style={styles.productImage}
-                        resizeMode={FastImage.resizeMode.contain}
-                    />
-                    <Pressable style={styles.favouriteButton} onPress={onToggleFavourite} hitSlop={10}>
-                        <HeartIcon isFilled={isFavourite} color={isFavourite ? commonColors.primary : colors.iconSecondary} />
-                    </Pressable>
-                    {item.discountPercentage > 0 && (
-                        <View style={styles.discountBadge}>
-                            <TextComp text={`-${Math.round(item.discountPercentage)}%`} style={styles.discountText} isDynamic={true} />
-                        </View>
-                    )}
-                </View>
-
-                <View style={styles.cardContent}>
-                    <TextComp isDynamic text={item.title} style={[styles.productName, { color: colors.text, textAlign: isRTL ? 'right' : 'left' }]} numberOfLines={2} />
-
-                    <View style={[styles.ratingRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <StarIcon color="#FFD700" size={12} />
-                        <TextComp isDynamic text={item.rating.toFixed(1)} style={[styles.ratingText, { color: colors.textSecondary }]} />
-                    </View>
-
-                    <View style={[styles.priceRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <TextComp isDynamic text={`$${item.price.toFixed(2)}`} style={[styles.price, { color: commonColors.primary }]} />
-                    </View>
-
-                    {onAddToCart && (
-                        cartQuantity > 0 && onIncreaseQuantity && onDecreaseQuantity ? (
-                            <View style={styles.quantityControlContainer}>
-                                <Pressable style={styles.quantityButton} onPress={onDecreaseQuantity}>
-                                    <TextComp isDynamic text="-" style={styles.quantityButtonText} />
-                                </Pressable>
-                                <TextComp isDynamic text={cartQuantity.toString()} style={[styles.quantityText, { color: colors.text }]} />
-                                <Pressable
-                                    style={[styles.quantityButton, cartQuantity >= item.stock && styles.quantityButtonDisabled]}
-                                    onPress={onIncreaseQuantity}
-                                    disabled={cartQuantity >= item.stock}
-                                >
-                                    <TextComp isDynamic text="+" style={styles.quantityButtonText} />
-                                </Pressable>
+             <View style={[styles.card, { backgroundColor: colors.surface }]}>
+                <Pressable onPress={onPress} style={styles.cardPressable}>
+                    <View style={styles.imageContainer}>
+                        <FastImageComp
+                            source={{ uri: item.thumbnail, priority: FastImage.priority.normal }}
+                            style={styles.productImage}
+                            resizeMode={FastImage.resizeMode.contain}
+                        />
+                        <Pressable style={styles.favouriteButton} onPress={onToggleFavourite} hitSlop={10}>
+                            <HeartIcon isFilled={isFavourite} color={isFavourite ? commonColors.primary : colors.iconSecondary} />
+                        </Pressable>
+                        {item.discountPercentage > 0 && (
+                            <View style={styles.discountBadge}>
+                                <TextComp text={`-${Math.round(item.discountPercentage)}%`} style={styles.discountText} isDynamic={true} />
                             </View>
-                        ) : (
-                            <Pressable
-                                style={[styles.addToCartButton, { backgroundColor: isOutOfStock ? colors.buttonDisabled : commonColors.primary }]}
-                                onPress={onAddToCart}
-                                disabled={isOutOfStock}
-                            >
-                                <TextComp isDynamic text={isOutOfStock ? t('OUT_OF_STOCK') : t('ADD_TO_CART')} style={styles.addToCartText} />
-                            </Pressable>
-                        )
-                    )}
-                </View>
-            </Pressable>
+                        )}
+                    </View>
+
+                    <View style={styles.cardContent}>
+                        <TextComp isDynamic text={item.title} style={[styles.productName, { color: colors.text, textAlign: isRTL ? 'right' : 'left' }]} numberOfLines={2} />
+
+                        <View style={[styles.ratingRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                            <StarIcon color="#FFD700" size={12} />
+                            <TextComp isDynamic text={item.rating.toFixed(1)} style={[styles.ratingText, { color: colors.textSecondary }]} />
+                        </View>
+
+                        <View style={[styles.priceRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                            <TextComp isDynamic text={`$${item.price.toFixed(2)}`} style={[styles.price, { color: commonColors.primary }]} />
+                        </View>
+
+                        {onAddToCart && (
+                            cartQuantity > 0 && onIncreaseQuantity && onDecreaseQuantity ? (
+                                <View style={styles.quantityControlContainer}>
+                                    <Pressable style={styles.quantityButton} onPress={onDecreaseQuantity}>
+                                        <TextComp isDynamic text="-" style={styles.quantityButtonText} />
+                                    </Pressable>
+                                    <TextComp isDynamic text={cartQuantity.toString()} style={[styles.quantityText, { color: colors.text }]} />
+                                    <Pressable
+                                        style={[styles.quantityButton, cartQuantity >= item.stock && styles.quantityButtonDisabled]}
+                                        onPress={onIncreaseQuantity}
+                                        disabled={cartQuantity >= item.stock}
+                                    >
+                                        <TextComp isDynamic text="+" style={styles.quantityButtonText} />
+                                    </Pressable>
+                                </View>
+                            ) : (
+                                <Pressable
+                                    style={[styles.addToCartButton, { backgroundColor: isOutOfStock ? colors.buttonDisabled : commonColors.primary }]}
+                                    onPress={onAddToCart}
+                                    disabled={isOutOfStock}
+                                >
+                                    <TextComp isDynamic text={isOutOfStock ? t('OUT_OF_STOCK') : t('ADD_TO_CART')} style={styles.addToCartText} />
+                                </Pressable>
+                            )
+                        )}
+                    </View>
+                </Pressable>
+            </View>
         </Animated.View>
     );
 };
@@ -118,17 +120,32 @@ const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
     const colors = Colors[theme];
 
     return useMemo(() => StyleSheet.create({
-        card: {
+        cardShadowShell: {
             width: CARD_WIDTH,
-            backgroundColor: 'transparent',
+            margin: CARD_MARGIN,
             borderRadius: moderateScale(12),
+            backgroundColor: colors.surface,  // ← must NOT be transparent for iOS shadow
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
             elevation: 3,
-            margin: CARD_MARGIN,
-            overflow: 'hidden',
+            // NO overflow: 'hidden' here
+        },
+        card: {
+            borderRadius: moderateScale(12),
+    overflow: 'hidden',   // ← clipping stays here, shadow is safe above
+    flex: 1,
+            // width: CARD_WIDTH,
+            // backgroundColor: 'transparent',
+            // borderRadius: moderateScale(12),
+            // shadowColor: '#000',
+            // shadowOffset: { width: 0, height: 2 },
+            // shadowOpacity: 0.1,
+            // shadowRadius: 4,
+            // elevation: 3,
+            // margin: CARD_MARGIN,
+            // overflow: 'hidden',
         },
         cardPressable: {
             flex: 1,
