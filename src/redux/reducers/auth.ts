@@ -70,7 +70,7 @@ const authSlice = createSlice({
             };
             state.isFirstTime = false;
             state.auth_token = "";
-            state.isHydrated = false;
+            // Do NOT reset isHydrated - app remains hydrated after logout
         },
     },
 });

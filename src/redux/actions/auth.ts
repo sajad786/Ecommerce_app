@@ -18,5 +18,4 @@ export const clearDataAction = () => {
     void secureStorage.removeItem("AUTH_TOKEN");
     void secureStorage.removeItem("USER_DATA");
     dispatch(clearData());
-    markHydratedState(false)
 }
