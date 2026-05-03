@@ -4,13 +4,15 @@
  * This module is responsible for initializing the app with user preferences stored in secure storage.
  */
 
-import { changeFirstTime, setRegisteredUsers } from "@/redux/reducers/auth";
+import { changeFirstTime, saveAuthToken, saveUserData, setRegisteredUsers } from "@/redux/reducers/auth";
 import { LanguageInterface, saveDefaultLanguage, saveDefaultTheme } from "@/redux/reducers/settings";
 import { setCart } from "@/redux/reducers/cart";
 import { setFavourites } from "@/redux/reducers/favourites";
-import store from "@/redux/store";
+import store, { completeAuthHydration } from "@/redux/store";
+import type { User } from "@/models/User";
 import i18next from "i18next";
 import { secureStorage } from "./secureStorage";
+import { markHydratedState } from "@/redux/actions/auth";
 const { dispatch } = store;
 
 /**
@@ -22,6 +24,7 @@ const { dispatch } = store;
  *  1. Check if the app is running for the first time
  *  2. Load and apply the user's preferred language
  *  3. Load and apply the user's preferred theme
+ *  4. Restore auth session (token / user profile) when present
  * 
  * @throws {Error} Will log any errors encountered during retrieval or dispatch
  * @returns {Promise<void>}
@@ -33,21 +36,31 @@ const { dispatch } = store;
 export const getLocalItem = async () => {
     try {
         // Check if this is the first time the app has been run
-        const isFirstTime = await secureStorage.getItem('IS_FIRST_TIME');
+        const isFirstTimeRaw = await secureStorage.getItem('IS_FIRST_TIME');
+        console.log('isFirstTime', isFirstTimeRaw);
 
-        console.log('isFirstTime', isFirstTime);
-        
         // Get saved language preferences
         const language = await secureStorage.getObject<LanguageInterface>('LANGUAGE');
         console.log('language', language);
-        
+
         // Get saved theme preferences
         const theme = await secureStorage.getItem('THEME');
         console.log('theme', theme);
 
-        // Update first time flag in Redux store
-        if (isFirstTime) {
+        const authToken = await secureStorage.getItem('AUTH_TOKEN');
+        if (authToken) {
+            dispatch(saveAuthToken(authToken));
+            const userData = await secureStorage.getObject<User>('USER_DATA');
+            if (userData && typeof userData === 'object') {
+                dispatch(saveUserData(userData));
+            }
             dispatch(changeFirstTime(true));
+        } else {
+            if (isFirstTimeRaw === 'true') {
+                dispatch(changeFirstTime(true));
+            } else if (isFirstTimeRaw === 'false') {
+                dispatch(changeFirstTime(false));
+            }
         }
 
         // Apply saved language if it exists
@@ -85,5 +98,8 @@ export const getLocalItem = async () => {
         }
     } catch (error) {
         console.log(error);
+    } finally {
+        completeAuthHydration();
+        markHydratedState(true);
     }
 }           
